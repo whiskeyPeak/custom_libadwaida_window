@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  window_manager:
+  yaru_window:
   yaru_widgets:
   yaru:
 

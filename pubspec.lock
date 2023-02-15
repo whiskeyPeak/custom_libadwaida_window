@@ -230,7 +230,7 @@ packages:
     source: hosted
     version: "2.1.4"
   window_manager:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: window_manager
       sha256: "5bdd29dc5f1f3185fc90696373a571d77968e03e5e820fb1ecdbdade3f5d8fff"
@@ -278,7 +278,7 @@ packages:
     source: hosted
     version: "2.1.0"
   yaru_window:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: yaru_window
       sha256: "18b3df2922a068e5480048335e2585c134e29ac77baec19b26fa32851910bf2f"
