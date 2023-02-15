@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:window_manager/window_manager.dart';
 import 'package:yaru_widgets/widgets.dart';
 import 'package:yaru/yaru.dart';
 
+import 'yaru_window_decoration.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+  await YaruWindowDecoration.ensureInitialized();
   await YaruWindowTitleBar.ensureInitialized();
-
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600),
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
 
   runApp(const MyApp());
 }
@@ -50,49 +38,30 @@ class _HomePageState extends State<HomePage> {
     "Tile 2",
     "Tile 3",
   ];
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: YaruMasterDetailPage(
-            appBar: const YaruWindowTitleBar(),
-            layoutDelegate: const YaruMasterResizablePaneDelegate(
-              initialPaneWidth: 300,
-              minPageWidth: 200,
-              minPaneWidth: 200,
-            ),
-            tileBuilder: (context, index, selected) => YaruMasterTile(
-              title: Text(bodyNames[index]),
-            ),
-            pageBuilder: (context, index) => YaruDetailPage(
-              appBar: const YaruWindowTitleBar(
-                title: Text("title"),
-              ),
-              body: Center(
-                child: Text(bodyNames[index]),
-              ),
-            ),
-            length: 3,
+    return YaruWindowDecoration(
+      child: YaruMasterDetailPage(
+        appBar: const YaruWindowTitleBar(),
+        layoutDelegate: const YaruMasterResizablePaneDelegate(
+          initialPaneWidth: 300,
+          minPageWidth: 200,
+          minPaneWidth: 200,
+        ),
+        tileBuilder: (context, index, selected) => YaruMasterTile(
+          title: Text(bodyNames[index]),
+        ),
+        pageBuilder: (context, index) => YaruDetailPage(
+          appBar: const YaruWindowTitleBar(
+            title: Text("title"),
+          ),
+          body: Center(
+            child: Text(bodyNames[index]),
           ),
         ),
-        IgnorePointer(
-          ignoring: true,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white.withOpacity(0.07)),
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        )
-      ],
+        length: 3,
+      ),
     );
   }
 }
