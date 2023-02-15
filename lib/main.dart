@@ -56,28 +56,42 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: YaruMasterDetailPage(
-        appBar: const YaruWindowTitleBar(),
-        layoutDelegate: const YaruMasterResizablePaneDelegate(
-          initialPaneWidth: 300,
-          minPageWidth: 200,
-          minPaneWidth: 200,
-        ),
-        tileBuilder: (context, index, selected) => YaruMasterTile(
-          title: Text(bodyNames[index]),
-        ),
-        pageBuilder: (context, index) => YaruDetailPage(
-          appBar: const YaruWindowTitleBar(
-            title: Text("title"),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: YaruMasterDetailPage(
+            appBar: const YaruWindowTitleBar(),
+            layoutDelegate: const YaruMasterResizablePaneDelegate(
+              initialPaneWidth: 300,
+              minPageWidth: 200,
+              minPaneWidth: 200,
+            ),
+            tileBuilder: (context, index, selected) => YaruMasterTile(
+              title: Text(bodyNames[index]),
+            ),
+            pageBuilder: (context, index) => YaruDetailPage(
+              appBar: const YaruWindowTitleBar(
+                title: Text("title"),
+              ),
+              body: Center(
+                child: Text(bodyNames[index]),
+              ),
+            ),
+            length: 3,
           ),
-          body: Center(
-            child: Text(bodyNames[index]),
-          ),
         ),
-        length: 3,
-      ),
+        IgnorePointer(
+          ignoring: true,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white.withOpacity(0.07)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
