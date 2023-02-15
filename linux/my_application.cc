@@ -14,6 +14,33 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+static void load_css() {
+  GdkScreen* screen = gdk_screen_get_default();
+  gpointer css_provider =
+      g_object_get_data(G_OBJECT(screen), "_css_provider_");
+
+  if (css_provider == nullptr) {
+    css_provider = gtk_css_provider_new();
+    gtk_style_context_add_provider_for_screen(
+        screen, GTK_STYLE_PROVIDER(css_provider),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_object_set_data_full(G_OBJECT(screen), "_css_provider_",
+                           css_provider, g_object_unref);
+  }
+
+  g_autoptr(GError) error = nullptr;
+  g_autofree gchar* exe_path = g_file_read_link("/proc/self/exe", &error);
+  g_autofree gchar* app_path = g_path_get_dirname(exe_path);
+  const gchar* asset_path = "data/flutter_assets/assets";
+  const gchar* css_file = "style.css";
+  g_autofree gchar* css_path =
+      g_build_filename(app_path, asset_path, css_file, nullptr);
+  if (!gtk_css_provider_load_from_path(GTK_CSS_PROVIDER(css_provider), css_path,
+                                       &error)) {
+    g_warning("%s: %s", css_path, error->message);
+  }
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
@@ -58,6 +85,7 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+  load_css();
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }

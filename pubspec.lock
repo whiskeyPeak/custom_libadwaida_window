@@ -238,7 +238,7 @@ packages:
     source: hosted
     version: "0.3.0"
   yaru:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: yaru
       sha256: "926cb0193ed521cb534ccc9bc686ec60b3c078c0f59667b252d4afed32586ac6"
